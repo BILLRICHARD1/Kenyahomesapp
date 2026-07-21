@@ -1,0 +1,50 @@
+{
+  "name": "aqualog",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web"
+  },
+  "dependencies": {
+    "@react-native-async-storage/async-storage": "^2.2.0",
+    "@react-navigation/bottom-tabs": "^7.9.0",
+    "@react-navigation/native": "^7.1.26",
+    "@react-navigation/native-stack": "^7.9.0",
+    "@react-navigation/stack": "^7.6.13",
+    "axios": "^1.13.2",
+    "babel-preset-expo": "~54.0.10",
+    "expo": "~54.0.33",
+    "expo-av": "^16.0.8",
+    "expo-camera": "~17.0.10",
+    "expo-haptics": "^55.0.14",
+    "expo-image-picker": "~17.0.11",
+    "expo-linear-gradient": "~15.0.8",
+    "expo-status-bar": "~3.0.9",
+    "expo-updates": "~29.0.16",
+    "lucide-react-native": "^0.544.0",
+    "nativewind": "^2.0.11",
+    "react": "19.1.0",
+    "react-native": "0.81.5",
+    "react-native-feather": "^1.1.2",
+    "react-native-gesture-handler": "~2.28.0",
+    "react-native-gifted-charts": "^1.4.76",
+    "react-native-paper": "^5.14.5",
+    "react-native-reanimated": "~4.1.1",
+    "react-native-safe-area-context": "^5.6.2",
+    "react-native-screens": "^4.16.0",
+    "react-native-svg": "15.12.1",
+    "react-native-vector-icons": "^10.3.0",
+    "react-native-worklets": "0.5.1",
+    "tailwindcss": "^3.3.2"
+  },
+  "private": true,
+  "devDependencies": {
+    "@babel/plugin-transform-class-properties": "^7.27.1",
+    "@babel/plugin-transform-private-methods": "^7.27.1",
+    "@babel/plugin-transform-private-property-in-object": "^7.27.1",
+    "metro-react-native-babel-preset": "^0.77.0"
+  }
+}
