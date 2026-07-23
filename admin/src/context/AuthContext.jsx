@@ -120,7 +120,7 @@ export const AuthProvider = ({ children }) => {
     const [maintenancemessage, setMaintenancemessage] = useState(null)
 
     const api = axios.create({
-        baseURL: 'http://localhost:5000/api/v1',
+        baseURL: import.meta.env.VITE_API_URL,
     });
 
     api.interceptors.request.use((config) => {
@@ -142,18 +142,34 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
-    // ← This is the critical fix
+    // Single effect: load token + profile + settings before rendering
     useEffect(() => {
         const initAuth = async () => {
+            // 1. Restore session from localStorage
             const savedToken = localStorage.getItem('token');
             if (savedToken) {
                 setToken(savedToken);
-                await fetchProfile(savedToken);   // Wait for profile
+                await fetchProfile(savedToken);
             }
-            setIsLoading(false);   // Only set false after attempt
+
+            // 2. Check maintenance mode
+            try {
+                const response = await api.get('/admin/getsettings');
+                const data = response.data;
+                if (data.settings?.[0]?.isMaintenance) {
+                    setIsMaintenance(true);
+                    setMaintenancemessage(data.settings[0].maintenanceMessage);
+                }
+            } catch (error) {
+                console.log('Could not fetch settings:', error.message);
+            }
+
+            // 3. Only mark loading done after both are resolved
+            setIsLoading(false);
         };
 
         initAuth();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const login = async (email, password) => {
@@ -170,27 +186,6 @@ export const AuthProvider = ({ children }) => {
             throw new Error(error.response?.data?.message || "Login failed");
         }
     };
-
-    useEffect(() => {
-        const getSettings = async () => {
-            try {
-                const response = await api.get("/admin/getsettings")
-                const data = response.data;
-                setIsLoading(false)
-                if (data.settings[0].isMaintenance === true || data.settings[0].isMaintenance) {
-                    setIsMaintenance(true)
-                    setMaintenancemessage(data.settings[0].maintenanceMessage)
-                }
-
-            } catch (error) {
-                setIsLoading(false)
-                console.log("error gettings settings")
-
-            }
-        }
-
-        getSettings()
-    }, [])
 
     const logout = () => {
         setUser(null);

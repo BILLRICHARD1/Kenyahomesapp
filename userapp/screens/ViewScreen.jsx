@@ -20,6 +20,7 @@ const ViewScreen = ({ route, navigation }) => {
     const [wishlistLoading, setWishlistLoading] = useState(false)
     const [phoneData, setPhoneData] = useState(null)
     const [payLoading, setPayLoading] = useState(false)
+    const [payStatus, setPayStatus] = useState(null) // null | 'waiting' | 'completed' | 'failed'
 
     useEffect(() => {
         fetchApartment()
@@ -70,25 +71,69 @@ const ViewScreen = ({ route, navigation }) => {
 
     const handleRevealContact = async () => {
         if (!user) return Alert.alert('Sign in required', 'Please log in to view contact details')
+
         Alert.alert(
             'Reveal Contact',
-            'You will be charged KES 100 to view the landlord\'s phone number. Proceed?',
+            "You will be charged KES 100 to view the landlord's phone number. An M-Pesa prompt will appear on your phone.",
             [
                 { text: 'Cancel', style: 'cancel' },
                 {
                     text: 'Pay KES 100',
                     onPress: async () => {
                         setPayLoading(true)
+                        setPayStatus(null)
+
                         try {
+                            // Step 1: Initiate STK Push
                             const res = await api.post(`/payments/reveal/${apartmentId}`)
-                            setPhoneData({ phone: res.data.phone, landlord: res.data.landlord })
-                            if (!res.data.alreadyPaid) {
-                                Alert.alert('Success', 'Contact unlocked successfully!')
+
+                            // Already paid in a previous session
+                            if (res.data.alreadyPaid) {
+                                setPhoneData({ phone: res.data.phone, landlord: res.data.landlord })
+                                setPayLoading(false)
+                                return
                             }
-                        } catch (err) {
-                            Alert.alert('Error', err?.response?.data?.message || 'Payment failed')
-                        } finally {
+
+                            // Step 2: STK push sent — start polling
+                            const { checkoutRequestId } = res.data
+                            setPayStatus('waiting')
                             setPayLoading(false)
+
+                            // Poll every 3 seconds, up to 40 seconds (13 attempts)
+                            let attempts = 0
+                            const maxAttempts = 13
+                            const interval = setInterval(async () => {
+                                attempts++
+                                try {
+                                    const poll = await api.get(`/payments/status/${checkoutRequestId}`)
+
+                                    if (poll.data.status === 'completed') {
+                                        clearInterval(interval)
+                                        setPayStatus('completed')
+                                        setPhoneData({ phone: poll.data.phone, landlord: poll.data.landlord })
+                                        Alert.alert('Payment Confirmed!', `Receipt: ${poll.data.receipt || 'N/A'}`)
+                                    } else if (poll.data.status === 'failed') {
+                                        clearInterval(interval)
+                                        setPayStatus('failed')
+                                        Alert.alert('Payment Failed', poll.data.message || 'Payment was cancelled. Please try again.')
+                                    } else if (attempts >= maxAttempts) {
+                                        clearInterval(interval)
+                                        setPayStatus('failed')
+                                        Alert.alert('Timed Out', 'We could not confirm your payment. If you were charged, please contact support.')
+                                    }
+                                    // still 'pending' — keep polling
+                                } catch (pollErr) {
+                                    clearInterval(interval)
+                                    setPayStatus('failed')
+                                    console.error('polling error:', pollErr)
+                                }
+                            }, 3000)
+
+                        } catch (err) {
+                            setPayLoading(false)
+                            setPayStatus(null)
+                            const msg = err?.response?.data?.message || 'Could not initiate payment. Try again.'
+                            Alert.alert('Error', msg)
                         }
                     }
                 }
@@ -241,6 +286,8 @@ const ViewScreen = ({ route, navigation }) => {
                     {/* Landlord / Contact section */}
                     <View className="bg-slate-50 rounded-2xl p-4 mb-4">
                         <Text className="font-semibold text-lg mb-3">Contact Landlord</Text>
+
+                        {/* Already unlocked */}
                         {phoneData ? (
                             <View className="space-y-3">
                                 <View className="flex-row items-center space-x-2">
@@ -262,10 +309,24 @@ const ViewScreen = ({ route, navigation }) => {
                                     <Text className="text-white font-semibold">Call Now</Text>
                                 </TouchableOpacity>
                             </View>
+
+                        ) : payStatus === 'waiting' ? (
+                            /* Waiting for user to enter M-Pesa PIN */
+                            <View className="items-center py-4 space-y-3">
+                                <ActivityIndicator size="large" color="#16a34a" />
+                                <Text className="text-gray-700 font-semibold text-center">
+                                    Check your phone for the M-Pesa prompt
+                                </Text>
+                                <Text className="text-gray-400 text-sm text-center">
+                                    Enter your M-Pesa PIN to complete payment.{'\n'}This page will update automatically.
+                                </Text>
+                            </View>
+
                         ) : (
+                            /* Not yet paid */
                             <View className="space-y-3">
                                 <Text className="text-gray-500 text-sm">
-                                    Pay KES 100 to reveal the landlord's phone number and contact them directly.
+                                    Pay KES 100 via M-Pesa to reveal the landlord's phone number and contact them directly.
                                 </Text>
                                 <TouchableOpacity
                                     onPress={handleRevealContact}
@@ -277,7 +338,7 @@ const ViewScreen = ({ route, navigation }) => {
                                         : <>
                                             <Phone size={18} color="white" />
                                             <Text className="text-white font-semibold">Reveal Contact — KES 100</Text>
-                                        </>
+                                          </>
                                     }
                                 </TouchableOpacity>
                             </View>

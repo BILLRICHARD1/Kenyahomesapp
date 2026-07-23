@@ -26,9 +26,19 @@ const Payment = sequelize.define('Payment', {
     },
     status: {
         type: DataTypes.ENUM('pending', 'completed', 'failed'),
-        defaultValue: 'completed', // simplified — in prod integrate M-Pesa
+        defaultValue: 'pending',
     },
     reference: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    // M-Pesa STK push request ID — used to match the async callback
+    checkoutRequestId: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    // M-Pesa receipt number returned after successful payment
+    mpesaReceiptNumber: {
         type: DataTypes.STRING,
         allowNull: true,
     },

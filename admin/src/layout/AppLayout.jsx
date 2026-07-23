@@ -50,6 +50,7 @@ const AppLayout = ({ children, activeTab, setActiveTab }) => {
                 return <DashboardHome salesData={salesData} productionData={productionData} user={user} />;
             case 'listings':
                 navigate("/listings");
+                return null;
             case 'users':
                 return <Users />;
             case 'inventory':

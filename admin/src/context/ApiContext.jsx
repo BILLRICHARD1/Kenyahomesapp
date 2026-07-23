@@ -64,7 +64,7 @@ export const ApiProvider = ({ children }) => {
     const { token, user } = useAuth();
 
     const api = axios.create({
-        baseURL: 'http://localhost:5000/api/v1',
+        baseURL: import.meta.env.VITE_API_URL,
     });
 
     api.interceptors.request.use((config) => {
@@ -109,8 +109,8 @@ export const ApiProvider = ({ children }) => {
     };
 
 
-    const addNewUser = async (username, email, password, role) => {
-        const response = await api.post('/users/register', { username, email, password, role });
+    const addNewUser = async (username, email, password, role, phone = '') => {
+        const response = await api.post('/users/register', { username, email, password, role, phone });
 
         return { success: true, data: response.data };
     }
@@ -150,7 +150,7 @@ export const ApiProvider = ({ children }) => {
 
 
 
-    const getInventory = async () => await api.get('/inventory').then(r => r.data);
+    const getInventory = async () => await api.get('/apartments').then(r => r.data);
 
     // Add more functions as needed...
 
@@ -158,15 +158,14 @@ export const ApiProvider = ({ children }) => {
         api,
         getProfile,
         getInventory,
-        getAllUsers,           // Only call this when needed
+        getAllUsers,
         addNewUser,
         updateUser,
         deleteUser,
         requestMaterials,
         resetPassword,
         getAllListings,
-        getStats      // Add new user
-        // Add other functions here
+        getStats
     }), [token, user?.role]);
 
     return (

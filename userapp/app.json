@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "aqualog",
-    "slug": "aqualog",
+    "name": "Kenya Homes",
+    "slug": "kenyahomes-user",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -13,28 +13,39 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.kenyahomes.user",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
+      "package": "com.kenyahomes.user",
+      "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#16a34a"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "permissions": [
+        "android.permission.RECORD_AUDIO"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
+    "plugins": [
+      "expo-image-picker"
+    ],
     "extra": {
+      "apiUrl": "http://192.168.2.102:5000/api/v1",
       "eas": {
-        "projectId": "9bf44be3-0430-49d1-94f1-3512a4efed6b"
+        "projectId": "ec930db0-b139-4f9d-b178-bbf8b7e7177a"
       }
     },
     "runtimeVersion": {
       "policy": "appVersion"
     },
-    "updates": {
-      "url": "https://u.expo.dev/9bf44be3-0430-49d1-94f1-3512a4efed6b"
-    }
+    "owner": "bill_clinton"
   }
 }

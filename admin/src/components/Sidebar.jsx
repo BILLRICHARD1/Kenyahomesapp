@@ -19,9 +19,7 @@ const AppSidebar = ({ sidebarOpen, setSidebarOpen, activeTab, setActiveTab }) =>
 
     // handle logout
     const handleLogout = () => {
-        setLoggingout(false)
         logout();
-
     };
 
     // Role-Based Menu Items

@@ -91,9 +91,9 @@ const UserAddModal = ({ isOpen, onClose, onSave }) => {
                             className="w-full px-4 py-3 border border-zinc-200 rounded-2xl focus:outline-none focus:border-black"
                         >
                             <option value="">Select Role</option>
-                            <option value="admin">Super Admin</option>
-                            <option value="finance">Finance</option>
-                            <option value="store">Store Guy</option>
+                            <option value="admin">Admin</option>
+                            <option value="landlord">Landlord</option>
+                            <option value="user">User</option>
                         </select>
                     </div>
 

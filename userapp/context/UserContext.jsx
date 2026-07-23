@@ -28,10 +28,8 @@ export const UserProvider = ({ children }) => {
         setToken(savedToken);
         setUser(JSON.parse(savedUser));
       }
-      logout()
     } catch (e) {
       console.error('restoreSession error:', e);
-      logout()
     } finally {
       setLoading(false);
     }
@@ -92,9 +90,12 @@ export const UserProvider = ({ children }) => {
   };
 
 
+  // Refresh profile only when we have a token
   useEffect(() => {
-    refreshProfile()
-  }, [])
+    if (token) {
+      refreshProfile();
+    }
+  }, [token]);
   return (
     <UserContext.Provider value={{ user, token, loading, login, register, logout, refreshProfile, updateProfile, restoreSession }}>
       {children}

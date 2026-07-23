@@ -78,6 +78,7 @@ const Dashboard = () => {
                 return <DashboardHome stats={stats} salesData={salesData} productionData={productionData} user={user} />;
             case 'pos':
                 navigate("/users");
+                return null;
             case 'users':
                 return <Users />;
             case 'inventory':

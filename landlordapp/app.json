@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "landlord",
-    "slug": "landlord",
+    "name": "Kenya Homes - Landlord",
+    "slug": "kenyahomes-landlord",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -13,28 +13,40 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.kenyahomes.landlord",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
+      "package": "com.kenyahomes.landlord",
+      "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#1d4ed8"
       },
-      "edgeToEdgeEnabled": true
+      
+      "permissions": [
+        "android.permission.RECORD_AUDIO"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
+    "plugins": [
+      "expo-image-picker"
+      
+    ],
     "extra": {
+      "apiUrl": "http://192.168.2.102:5000/api/v1",
       "eas": {
-        "projectId": "9bf44be3-0430-49d1-94f1-3512a4efed6b"
+        "projectId": "4cfc0b5c-a414-4bbc-9a07-b2a90ff66347"
       }
     },
     "runtimeVersion": {
       "policy": "appVersion"
     },
-    "updates": {
-      "url": "https://u.expo.dev/9bf44be3-0430-49d1-94f1-3512a4efed6b"
-    }
+    "owner": "bill_clinton"
   }
 }

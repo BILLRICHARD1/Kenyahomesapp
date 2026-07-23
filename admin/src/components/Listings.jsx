@@ -26,7 +26,7 @@ const Listings = () => {
     const [loading, setLoading] = useState(false);
     const { addNewUser, updateUser, deleteUser } = useApi()
     console.log("lis", listings)
-    const uploadurl = "http://localhost:5000/uploads/"
+    const uploadurl = `${import.meta.env.VITE_API_URL?.replace('/api/v1', '')}/uploads/`
 
     const fetchlistings = async () => {
         try {
@@ -322,8 +322,8 @@ const Listings = () => {
                     <div className="bg-white rounded-xl max-w-md w-full p-6 mx-4">
                         <div className="w-full flex flex-col space-y-4">
                             <p className="text-black">Name: {landlord.landlord.username}</p>
-                            <p className="text-black">Phone: {landlord.landlord.email}</p>
-                            <p className="text-black">Email: {landlord.landlord.phone}</p>
+                            <p className="text-black">Email: {landlord.landlord.email}</p>
+                            <p className="text-black">Phone: {landlord.landlord.phone}</p>
                         </div>
 
                         <div className="flex flex-row  py-6 items-center justify-center space-x-5 items-center">
