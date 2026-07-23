@@ -1,6 +1,5 @@
 node_modules/
 */node_modules/
 .expo/
-dist/.expo/
-build/
-*.lock (if you want, though lock files should be tracked)
+dist/
+web-build/
