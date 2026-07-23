@@ -37,8 +37,9 @@
         "projectId": "4cfc0b5c-a414-4bbc-9a07-b2a90ff66347"
       }
     },
-    "runtimeVersion": {
-      "policy": "1.0.0"
+    "runtimeVersion": "1.0.0",
+    "updates": {
+      "fallbackToCacheTimeout": 0
     },
     "owner": "bill_clinton"
   }
