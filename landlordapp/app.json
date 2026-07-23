@@ -6,12 +6,6 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
-    "newArchEnabled": true,
-    "splash": {
-      "image": "./assets/splash-icon.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.kenyahomes.landlord",
@@ -26,7 +20,6 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#1d4ed8"
       },
-      
       "permissions": [
         "android.permission.RECORD_AUDIO"
       ]
@@ -35,8 +28,8 @@
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
-      "expo-image-picker"
-      
+      "expo-image-picker",
+      "expo-status-bar"
     ],
     "extra": {
       "apiUrl": "http://192.168.2.102:5000/api/v1",
@@ -45,7 +38,7 @@
       }
     },
     "runtimeVersion": {
-      "policy": "appVersion"
+      "policy": "1.0.0"
     },
     "owner": "bill_clinton"
   }
